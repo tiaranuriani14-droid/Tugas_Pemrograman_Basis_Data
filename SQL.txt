@@ -1,0 +1,297 @@
+BAGIAN A
+DELIMITER $$
+
+CREATE PROCEDURE identitas_mahasiswa()
+BEGIN
+    
+    DECLARE nama1 VARCHAR(50) DEFAULT 'Tiara Nuriani';
+    DECLARE nim1 VARCHAR(20) DEFAULT '2411024';
+    DECLARE semester1 INT DEFAULT 4;
+    DECLARE prodi1 VARCHAR(50) DEFAULT 'Informatika';
+
+    
+    DECLARE nama2 VARCHAR(50) DEFAULT 'Magfakhrani Nur Fauzia';
+    DECLARE nim2 VARCHAR(20) DEFAULT '2411050';
+    DECLARE semester2 INT DEFAULT 5;
+    DECLARE prodi2 VARCHAR(50) DEFAULT 'Informatika';
+
+    
+    DECLARE kampus VARCHAR(100) DEFAULT 'Universitas Mega Buana Palopo';
+
+    
+    SELECT CONCAT(
+        'Mahasiswa ', nama1, ' (', nim1, ') dari Program Studi ', prodi1,
+        ' terdaftar di ', kampus, ' pada semester ', semester1, '.'
+    ) AS hasil
+    
+    UNION ALL
+    
+    SELECT CONCAT(
+        'Mahasiswa ', nama2, ' (', nim2, ') dari Program Studi ', prodi2,
+        ' terdaftar di ', kampus, ' pada semester ', semester2, '.'
+    ) AS hasil;
+
+END$$
+
+DELIMITER ;
+
+BAGIAN B
+DELIMITER $$
+
+CREATE PROCEDURE validasi_akademik_mahasiswa()
+BEGIN
+    
+    DECLARE nama1 VARCHAR(50) DEFAULT 'Tiara Nuriani';
+    DECLARE sks1 INT DEFAULT 22;
+    DECLARE ipk1 DECIMAL(3,2) DEFAULT 3.20;
+    DECLARE status_ukt1 VARCHAR(20) DEFAULT 'LUNAS';
+    DECLARE semester1 INT DEFAULT 4;
+
+    DECLARE nama2 VARCHAR(50) DEFAULT 'Magfakhrani Nur Fauzia';
+    DECLARE sks2 INT DEFAULT 15;
+    DECLARE ipk2 DECIMAL(3,2) DEFAULT 2.30;
+    DECLARE status_ukt2 VARCHAR(20) DEFAULT 'BELUM LUNAS';
+    DECLARE semester2 INT DEFAULT 5;
+
+    DECLARE status_data1 VARCHAR(20);
+    DECLARE beban1 VARCHAR(20);
+    DECLARE performa1 VARCHAR(30);
+
+    DECLARE status_data2 VARCHAR(20);
+    DECLARE beban2 VARCHAR(20);
+    DECLARE performa2 VARCHAR(30);
+
+    
+    IF status_ukt1 = 'LUNAS' AND semester1 > 0 AND sks1 > 0 THEN
+        SET status_data1 = 'Valid';
+    ELSE
+        SET status_data1 = 'Tidak Valid';
+    END IF;
+
+    IF sks1 BETWEEN 19 AND 24 THEN
+        SET beban1 = 'Padat';
+    ELSEIF sks1 BETWEEN 13 AND 18 THEN
+        SET beban1 = 'Sedang';
+    ELSE
+        SET beban1 = 'Lainnya';
+    END IF;
+
+    IF ipk1 >= 3.00 THEN
+        SET performa1 = 'Baik';
+    ELSE
+        SET performa1 = 'Perlu Pembinaan';
+    END IF;
+
+    
+    IF status_ukt2 = 'LUNAS' AND semester2 > 0 AND sks2 > 0 THEN
+        SET status_data2 = 'Valid';
+    ELSE
+        SET status_data2 = 'Tidak Valid';
+    END IF;
+
+    IF sks2 BETWEEN 13 AND 18 THEN
+        SET beban2 = 'Sedang';
+    ELSEIF sks2 BETWEEN 19 AND 24 THEN
+        SET beban2 = 'Padat';
+    ELSE
+        SET beban2 = 'Lainnya';
+    END IF;
+
+    IF ipk2 >= 3.00 THEN
+        SET performa2 = 'Baik';
+    ELSE
+        SET performa2 = 'Perlu Pembinaan';
+    END IF;
+
+    
+    SELECT 
+        nama1 AS Nama,
+        status_data1 AS Status_Data,
+        beban1 AS Beban_Studi,
+        performa1 AS Performa
+
+    UNION ALL
+
+    SELECT 
+        nama2,
+        status_data2,
+        beban2,
+        performa2;
+
+END$$
+
+DELIMITER ;
+
+BAGIAN C
+DELIMITER $$
+
+CREATE PROCEDURE ringkasan_krs_mahasiswa()
+BEGIN
+    
+    DECLARE nama1 VARCHAR(50) DEFAULT 'Tiara Nuriani';
+    DECLARE nim1 VARCHAR(20) DEFAULT '2411024';
+    DECLARE sks1 INT DEFAULT 22;
+    DECLARE ipk1 DECIMAL(3,2) DEFAULT 3.20;
+    DECLARE status_ukt1 VARCHAR(20) DEFAULT 'LUNAS';
+    DECLARE semester1 INT DEFAULT 4;
+
+    DECLARE nama2 VARCHAR(50) DEFAULT 'Magfakhrani Nur Fauzia';
+    DECLARE nim2 VARCHAR(20) DEFAULT '2411050';
+    DECLARE sks2 INT DEFAULT 15;
+    DECLARE ipk2 DECIMAL(3,2) DEFAULT 2.30;
+    DECLARE status_ukt2 VARCHAR(20) DEFAULT 'BELUM LUNAS';
+    DECLARE semester2 INT DEFAULT 5;
+
+    
+    DECLARE status1 VARCHAR(20);
+    DECLARE beban1 VARCHAR(20);
+    DECLARE performa1 VARCHAR(30);
+    DECLARE alasan1 VARCHAR(100);
+
+    DECLARE status2 VARCHAR(20);
+    DECLARE beban2 VARCHAR(20);
+    DECLARE performa2 VARCHAR(30);
+    DECLARE alasan2 VARCHAR(100);
+
+    
+    IF status_ukt1 = 'LUNAS' AND semester1 > 0 AND sks1 > 0 THEN
+        SET status1 = 'Layak';
+        SET alasan1 = 'Semua syarat terpenuhi';
+    ELSE
+        SET status1 = 'Tidak Layak';
+        SET alasan1 = 'Syarat tidak terpenuhi';
+    END IF;
+
+    IF sks1 BETWEEN 19 AND 24 THEN
+        SET beban1 = 'Padat';
+    ELSEIF sks1 BETWEEN 13 AND 18 THEN
+        SET beban1 = 'Sedang';
+    ELSE
+        SET beban1 = 'Ringan';
+    END IF;
+
+    IF ipk1 >= 3.00 THEN
+        SET performa1 = 'Baik';
+    ELSE
+        SET performa1 = 'Perlu Pembinaan';
+    END IF;
+
+    
+    IF status_ukt2 = 'LUNAS' AND semester2 > 0 AND sks2 > 0 THEN
+        SET status2 = 'Layak';
+        SET alasan2 = 'Semua syarat terpenuhi';
+    ELSE
+        SET status2 = 'Tidak Layak';
+        SET alasan2 = 'Syarat tidak terpenuhi';
+    END IF;
+
+    IF sks2 BETWEEN 13 AND 18 THEN
+        SET beban2 = 'Sedang';
+    ELSEIF sks2 BETWEEN 19 AND 24 THEN
+        SET beban2 = 'Padat';
+    ELSE
+        SET beban2 = 'Ringan';
+    END IF;
+
+    IF ipk2 >= 3.00 THEN
+        SET performa2 = 'Baik';
+    ELSE
+        SET performa2 = 'Perlu Pembinaan';
+    END IF;
+
+    -
+    SELECT 
+        nama1 AS Nama,
+        nim1 AS NIM,
+        semester1 AS Semester,
+        sks1 AS SKS,
+        ipk1 AS IPK,
+        status_ukt1 AS Status_Pembayaran,
+        status1 AS Kelayakan_KRS,
+        beban1 AS Beban_Studi,
+        performa1 AS Performa_Akademik,
+        alasan1 AS Alasan
+
+    UNION ALL
+
+    SELECT 
+        nama2,
+        nim2,
+        semester2,
+        sks2,
+        ipk2,
+        status_ukt2,
+        status2,
+        beban2,
+        performa2,
+        alasan2;
+
+END$$
+
+DELIMITER ;
+
+BAGIAN D
+DELIMITER $$
+
+CREATE PROCEDURE analisis_dua_mahasiswa()
+BEGIN
+    
+    DECLARE nama1 VARCHAR(50) DEFAULT 'Tiara Nuriani';
+    DECLARE nim1 VARCHAR(20) DEFAULT '2411024';
+    DECLARE semester1 INT DEFAULT 4;
+    DECLARE sks1 INT DEFAULT 22;
+    DECLARE ipk1 DECIMAL(3,2) DEFAULT 3.20;
+    DECLARE status1 VARCHAR(20) DEFAULT 'LUNAS';
+
+    DECLARE nama2 VARCHAR(50) DEFAULT 'Magfakhrani Nur Fauzia';
+    DECLARE nim2 VARCHAR(20) DEFAULT '2411050';
+    DECLARE semester2 INT DEFAULT 5;
+    DECLARE sks2 INT DEFAULT 15;
+    DECLARE ipk2 DECIMAL(3,2) DEFAULT 2.30;
+    DECLARE status2 VARCHAR(20) DEFAULT 'BELUM LUNAS';
+
+    
+    DECLARE kesimpulan VARCHAR(200);
+
+    
+    SELECT 
+        nama1 AS Nama,
+        nim1 AS NIM,
+        semester1 AS Semester,
+        sks1 AS SKS,
+        ipk1 AS IPK,
+        status1 AS Status
+
+    UNION ALL
+
+    SELECT 
+        nama2,
+        nim2,
+        semester2,
+        sks2,
+        ipk2,
+        status2;
+
+    
+    IF ipk1 > ipk2 THEN
+        SET kesimpulan = CONCAT('Mahasiswa ', nama1, ' memiliki performa akademik lebih baik dibanding ', nama2);
+    
+    ELSEIF ipk2 > ipk1 THEN
+        SET kesimpulan = CONCAT('Mahasiswa ', nama2, ' memiliki performa akademik lebih baik dibanding ', nama1);
+    
+    ELSE
+        IF sks1 > sks2 THEN
+            SET kesimpulan = CONCAT('Mahasiswa ', nama1, ' lebih baik (berdasarkan SKS)');
+        ELSEIF sks2 > sks1 THEN
+            SET kesimpulan = CONCAT('Mahasiswa ', nama2, ' lebih baik (berdasarkan SKS)');
+        ELSE
+            SET kesimpulan = 'Kedua mahasiswa setara';
+        END IF;
+    END IF;
+
+    
+    SELECT kesimpulan AS Kesimpulan;
+
+END$$
+
+DELIMITER ;
